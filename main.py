@@ -132,13 +132,13 @@ class Client(discord.Client):
             await message.channel.send('suka ngompol di celana')
         
         elif msg.startswith('!kiwi'):
-            await message.channel.send('gua hancurin isi kepala lu gw gampar lu')
+            await message.channel.send('Apeeeeeeeeee')
         
         elif msg.startswith('!ml'):
             await message.channel.send('@everyone 🎮 Langsung aja ml yg mau ikut!')
 
         elif msg.startswith('!gg'):
-            await message.channel.send('gg emg suka cowo gaes')
+            await message.channel.send('infokan mancing fish it')
 
         elif msg.startswith('!brann'):
             await message.channel.send('Hallo owner baik dan ganteng')
@@ -148,6 +148,9 @@ class Client(discord.Client):
 
         elif msg.startswith('!maul'):
             await message.channel.send('maul berak celana di sekolah')
+        
+        elif msg.startswith('!yeay'):
+            await message.channel.send('adik terbaik sedipienpi ')
 
 intents = discord.Intents.default()
 intents.message_content = True
