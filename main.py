@@ -173,8 +173,9 @@ class Client(discord.Client):
             if message.mentions:
                 target = message.mentions[0]
                 gif_url = random.choice([
-                    "https://c.tenor.com/ZR6hQy6E0YkAAAAC/anime-kiss.gif",
-                    "https://c.tenor.com/b7V6Q8Y6N3cAAAAC/anime-kiss.gif"
+                    "https://media1.tenor.com/m/1fNT0SY5cjwAAAAd/nene-nene-amano.gif",
+                    "https://media1.tenor.com/m/Fvwt33eN3hUAAAAC/anime-cute.gif"
+                    "https://media1.tenor.com/m/iDQT9BjSSXsAAAAC/kimsoohyun-kimjiwon.gif"
                 ])
                 embed = discord.Embed(
                     description=f"{message.author.mention} mencium {target.mention} 😘",
@@ -189,8 +190,8 @@ class Client(discord.Client):
             if message.mentions:
                 target = message.mentions[0]
                 gif_url = random.choice([
-                    "https://c.tenor.com/6a42QlkVsCEAAAAC/anime-slap.gif",
-                    "https://c.tenor.com/Vkq5H2kLk2AAAAAC/anime-slap.gif"
+                    "https://media1.tenor.com/m/bO1H2Zv_5doAAAAC/mai-mai-san.gif",
+                    "https://media1.tenor.com/m/WYmal-WAnksAAAAd/yuzuki-mizusaka-nonoka-komiya.gif"
                 ])
                 embed = discord.Embed(
                     description=f"{message.author.mention} menampar {target.mention} 🖐️",
@@ -204,7 +205,7 @@ class Client(discord.Client):
         elif msg.startswith('!hug'):
             if message.mentions:
                 target = message.mentions[0]
-                gif_url = "https://c.tenor.com/ZVNnJ9Fq6cAAAAAC/anime-hug.gif"
+                gif_url = "https://media1.tenor.com/m/G_IvONY8EFgAAAAC/aharen-san-anime-hug.gif"
                 embed = discord.Embed(
                     description=f"{message.author.mention} memeluk {target.mention} 🤗",
                     color=discord.Color.green()
@@ -244,8 +245,8 @@ class Client(discord.Client):
             if message.mentions:
                 target = message.mentions[0]
                 gif_url = random.choice([
-                    "https://c.tenor.com/4Y5hXk0Z4w0AAAAC/anime-fight.gif",
-                    "https://c.tenor.com/7QKqJq0vP7YAAAAC/anime-attack.gif"
+                    "https://media.tenor.com/HqHu-BqxJUEAAAAi/anime-xd.gif",
+                    "https://media1.tenor.com/m/230mTazmYVYAAAAC/anime-anime-boy.gif"
                 ])
                 embed = discord.Embed(
                     description=f"{message.author.mention} menyerang {target.mention} ⚔️",
