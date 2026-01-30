@@ -3,6 +3,8 @@ from config import TOKEN
 
 WELCOME_CHANNEL_ID = 1417152242817044550
 GOODBYE_CHANNEL_ID = 1417152314476859422
+BOOST_CHANNEL_ID = 1417152381291860118
+BOOSTER_ROLE_ID = 1437740399786459247    
 AUTO_ROLE_ID = 1438899323336130802
 
 class Client(discord.Client):
@@ -50,6 +52,47 @@ class Client(discord.Client):
             embed.set_image(url="https://i.imgur.com/k3II9KX.jpeg")
 
             await channel.send(embed=embed)
+
+    # ================= Booster =================
+    async def on_member_update(self, before, after):
+        # Seseorang baru saja boost
+        if before.premium_since is None and after.premium_since is not None:
+            channel = after.guild.get_channel(BOOST_CHANNEL_ID)
+
+            if channel:
+                embed = discord.Embed(
+                    title="🚀 SERVER BOOST!",
+                    description=f"Terima kasih {after.mention} sudah boost **{after.guild.name}**! 💜",
+                    color=discord.Color.purple()
+                )
+                embed.add_field(name="Total Boost Server", value=after.guild.premium_subscription_count)
+                embed.set_thumbnail(url=after.display_avatar.url)
+
+                await channel.send(embed=embed)
+
+            # 🎁 Kasih role Booster
+            role = after.guild.get_role(BOOSTER_ROLE_ID)
+            if role:
+                try:
+                    await after.add_roles(role)
+                except discord.Forbidden:
+                    print("Tidak punya izin kasih role booster")
+
+            # 💌 Kirim DM ke booster
+            try:
+                await after.send(f"Terima kasih sudah boost {after.guild.name}! Kamu dapat role spesial 💜")
+            except:
+                pass
+
+        # Server naik level boost
+        if before.guild.premium_tier < after.guild.premium_tier:
+            channel = after.guild.get_channel(BOOST_CHANNEL_ID)
+            if channel:
+                await channel.send(
+                    f"@everyone 🎉 Server naik ke **LEVEL {after.guild.premium_tier}** berkat para booster! Terima kasih 💜"
+                )
+
+
 
     # ================= COMMAND =================
     async def on_message(self, message):
