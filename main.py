@@ -163,6 +163,9 @@ class Client(discord.Client):
 
         elif msg.startswith('!diyana'):
             await message.channel.send('Apakabar anak anak absen dlu satu satu')
+        
+        elif msg.startswith('!bii'):
+            await message.channel.send('Hallo my Kisah 📖')
 
 intents = discord.Intents.default()
 intents.message_content = True
