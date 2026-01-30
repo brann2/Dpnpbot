@@ -166,14 +166,15 @@ class Client(discord.Client):
         
         elif msg.startswith('!bii'):
             await message.channel.send('Hallo my Kisah 📖')
-                    # ===== INTERACTION GIF COMMANDS (TAMBAHAN) =====
+                    
 
+        
         elif msg.startswith('!kiss'):
             if message.mentions:
                 target = message.mentions[0]
                 gif_url = random.choice([
-                    "https://media.tenor.com/0AVbKGY_MxMAAAAC/kiss-anime.gif",
-                    "https://media.tenor.com/8k0xN6vWkO0AAAAC/anime-kiss.gif"
+                    "https://c.tenor.com/ZR6hQy6E0YkAAAAC/anime-kiss.gif",
+                    "https://c.tenor.com/b7V6Q8Y6N3cAAAAC/anime-kiss.gif"
                 ])
                 embed = discord.Embed(
                     description=f"{message.author.mention} mencium {target.mention} 😘",
@@ -182,14 +183,14 @@ class Client(discord.Client):
                 embed.set_image(url=gif_url)
                 await message.channel.send(embed=embed)
             else:
-                await message.channel.send("Tag orangnya dulu ya 😅")
+                await message.channel.send("Tag orangnya dulu ya 😉")
 
         elif msg.startswith('!slap'):
             if message.mentions:
                 target = message.mentions[0]
                 gif_url = random.choice([
-                    "https://media.tenor.com/6a42QlkVsCEAAAAC/anime-slap.gif",
-                    "https://media.tenor.com/o5Y3P5vJbZkAAAAC/slap-anime.gif"
+                    "https://c.tenor.com/6a42QlkVsCEAAAAC/anime-slap.gif",
+                    "https://c.tenor.com/Vkq5H2kLk2AAAAAC/anime-slap.gif"
                 ])
                 embed = discord.Embed(
                     description=f"{message.author.mention} menampar {target.mention} 🖐️",
@@ -198,15 +199,12 @@ class Client(discord.Client):
                 embed.set_image(url=gif_url)
                 await message.channel.send(embed=embed)
             else:
-                await message.channel.send("Tag orangnya dulu ya 😤")
+                await message.channel.send("Tag orangnya dulu ya 😉")
 
         elif msg.startswith('!hug'):
             if message.mentions:
                 target = message.mentions[0]
-                gif_url = random.choice([
-                    "https://media.tenor.com/ZVNnJ9Fq6cAAAAAC/anime-hug.gif",
-                    "https://media.tenor.com/5qHhC6d9s2gAAAAC/anime-hug-cute.gif"
-                ])
+                gif_url = "https://c.tenor.com/ZVNnJ9Fq6cAAAAAC/anime-hug.gif"
                 embed = discord.Embed(
                     description=f"{message.author.mention} memeluk {target.mention} 🤗",
                     color=discord.Color.green()
@@ -214,15 +212,12 @@ class Client(discord.Client):
                 embed.set_image(url=gif_url)
                 await message.channel.send(embed=embed)
             else:
-                await message.channel.send("Tag orangnya dulu ya 🤗")
+                await message.channel.send("Tag orangnya dulu ya 😉")
 
         elif msg.startswith('!bite'):
             if message.mentions:
                 target = message.mentions[0]
-                gif_url = random.choice([
-                    "https://media.tenor.com/mB9iZ9fL5oQAAAAC/anime-bite.gif",
-                    "https://media.tenor.com/0XKqk0rGZW4AAAAC/anime-bite-cute.gif"
-                ])
+                gif_url = "https://c.tenor.com/8YpRZ4H7dWkAAAAC/anime-bite.gif"
                 embed = discord.Embed(
                     description=f"{message.author.mention} menggigit {target.mention} 😈",
                     color=discord.Color.orange()
@@ -230,15 +225,12 @@ class Client(discord.Client):
                 embed.set_image(url=gif_url)
                 await message.channel.send(embed=embed)
             else:
-                await message.channel.send("Tag orangnya dulu ya 😏")
+                await message.channel.send("Tag orangnya dulu ya 😉")
 
         elif msg.startswith('!pat'):
             if message.mentions:
                 target = message.mentions[0]
-                gif_url = random.choice([
-                    "https://media.tenor.com/LUqLUEvFZ8kAAAAC/anime-head-pat.gif",
-                    "https://media.tenor.com/4h9gY6kE7WgAAAAC/anime-pat.gif"
-                ])
+                gif_url = "https://c.tenor.com/LUqLUEvFZ8kAAAAC/anime-head-pat.gif"
                 embed = discord.Embed(
                     description=f"{message.author.mention} menepuk kepala {target.mention} 🥰",
                     color=discord.Color.blurple()
@@ -246,7 +238,23 @@ class Client(discord.Client):
                 embed.set_image(url=gif_url)
                 await message.channel.send(embed=embed)
             else:
-                await message.channel.send("Tag orangnya dulu ya 🥺")
+                await message.channel.send("Tag orangnya dulu ya 😉")
+
+        elif msg.startswith('!kill'):
+            if message.mentions:
+                target = message.mentions[0]
+                gif_url = random.choice([
+                    "https://c.tenor.com/4Y5hXk0Z4w0AAAAC/anime-fight.gif",
+                    "https://c.tenor.com/7QKqJq0vP7YAAAAC/anime-attack.gif"
+                ])
+                embed = discord.Embed(
+                    description=f"{message.author.mention} menyerang {target.mention} ⚔️",
+                    color=discord.Color.dark_red()
+                )
+                embed.set_image(url=gif_url)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Tag orangnya dulu ya 😉")
 
 
 intents = discord.Intents.default()
