@@ -85,6 +85,12 @@ class Client(discord.Client):
         elif msg.startswith('yuka'):
             await message.channel.send('hallo kak cantik gmn kabarnya')
         
+        elif msg.startswith('ryan'):
+            await message.channel.send('suka ngompol di celana')
+        
+        elif msg.startswith('kiwi'):
+            await message.channel.send('gua hancurin isi kepala lu gw gampar lu')
+        
         
         elif msg.startswith('ml'):
             await message.channel.send('@everyone 🎮 Langsung aja ml yg mau ikut!')
