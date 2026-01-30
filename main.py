@@ -7,6 +7,7 @@ GOODBYE_CHANNEL_ID = 1417152314476859422
 BOOST_CHANNEL_ID = 1417152381291860118
 BOOSTER_ROLE_ID = 1437740399786459247    
 AUTO_ROLE_ID = 1438899323336130802
+RULES_CHANNEL_ID = 1459140957932093652
 
 class Client(discord.Client):
     async def on_ready(self):
@@ -38,6 +39,26 @@ class Client(discord.Client):
             await member.send(f"Hai {member.name}, selamat datang di {member.guild.name}! 🎊")
         except:
             pass
+
+        rules_channel = member.guild.get_channel(RULES_CHANNEL_ID)
+
+        if rules_channel:
+            try:
+                embed = discord.Embed(
+                    title=f"Selamat datang di {member.guild.name} 🎉",
+                    description=(
+                        f"Halo {member.name}! Senang kamu bergabung 💖\n\n"
+                        f"📜 Sebelum mulai, wajib baca rules server ya:\n"
+                        f"👉 {rules_channel.mention}\n\n"
+                        f"Semoga betah dan have fun! di Dpnp 🎮✨"
+                    ),
+                    color=discord.Color.blue()
+                )
+                embed.set_thumbnail(url=member.guild.icon.url if member.guild.icon else None)
+
+                await member.send(embed=embed)
+            except:
+                print(f"Gagal kirim DM ke {member.name}")
 
     # ================= GOODBYE =================
     async def on_member_remove(self, member):
