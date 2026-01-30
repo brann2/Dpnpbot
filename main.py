@@ -82,6 +82,9 @@ class Client(discord.Client):
         elif msg.startswith('Roblox'):
             await message.channel.send('@everyone 🎮 Langsung aja Roblox!')
         
+        elif msg.startswith('yuka'):
+            await message.channel.send('hallo kak cantik gmn kabarnya')
+        
         
         elif msg.startswith('ml'):
             await message.channel.send('@everyone 🎮 Langsung aja ml yg mau ikut!')
