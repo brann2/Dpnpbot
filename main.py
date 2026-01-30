@@ -114,28 +114,28 @@ class Client(discord.Client):
             await message.channel.send('Pong! 🏓')
 
         elif msg.startswith('!among'):
-            await message.channel.send('@everyone 🚨 Ayo Among Us!')
+            await message.channel.send('@everyone  Ayo Among Us!')
         
         elif msg.startswith('!Among'):
-            await message.channel.send('@everyone 🚨 Ayo Among Us!')
+            await message.channel.send('@everyone  Ayo Among Us!')
 
         elif msg.startswith('!roblox'):
-            await message.channel.send('@everyone 🎮 Langsung aja Roblox!')
+            await message.channel.send('@everyone  Langsung aja Roblox!')
 
         elif msg.startswith('!Roblox'):
-            await message.channel.send('@everyone 🎮 Langsung aja Roblox!')
+            await message.channel.send('@everyone  Langsung aja Roblox!')
         
         elif msg.startswith('!yuka'):
             await message.channel.send('hallo kak cantik gmn kabarnya')
         
         elif msg.startswith('!ryan'):
-            await message.channel.send('suka ngompol di celana')
+            await message.channel.send('Hallo Ganteng')
         
         elif msg.startswith('!kiwi'):
             await message.channel.send('Apeeeeeeeeee')
         
         elif msg.startswith('!ml'):
-            await message.channel.send('@everyone 🎮 Langsung aja ml yg mau ikut!')
+            await message.channel.send('@everyone  Langsung aja ml yg mau ikut!')
 
         elif msg.startswith('!gg'):
             await message.channel.send('infokan mancing fish it')
@@ -143,7 +143,7 @@ class Client(discord.Client):
         elif msg.startswith('!brann'):
             await message.channel.send('Hallo owner baik dan ganteng')
         
-        elif msg.startswith('!lele'):
+        elif msg.startswith('!king'):
             await message.channel.send('Gais Kalian Baik Baik aja gwencana ya')
 
         elif msg.startswith('!maul'):
@@ -151,6 +151,18 @@ class Client(discord.Client):
         
         elif msg.startswith('!yeay'):
             await message.channel.send('adik terbaik sedipienpi ')
+
+        elif msg.startswith('!wann'):
+            await message.channel.send('wann Login ada yang mau minta gendong tuh')
+
+        elif msg.startswith('!itik'):
+            await message.channel.send('info roblox/ml  brannn')
+
+        elif msg.startswith('!putra'):
+            await message.channel.send('ytta')
+
+        elif msg.startswith('!diyana'):
+            await message.channel.send('Apakabar anak anak absen dlu satu satu')
 
 intents = discord.Intents.default()
 intents.message_content = True
