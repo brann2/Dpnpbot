@@ -1,4 +1,5 @@
 import discord
+import random
 from config import TOKEN
 
 WELCOME_CHANNEL_ID = 1417152242817044550
@@ -91,8 +92,7 @@ class Client(discord.Client):
                 await channel.send(
                     f"@everyone 🎉 Server naik ke **LEVEL {after.guild.premium_tier}** berkat para booster! Terima kasih 💜"
                 )
-
-
+    
 
     # ================= COMMAND =================
     async def on_message(self, message):
@@ -166,6 +166,88 @@ class Client(discord.Client):
         
         elif msg.startswith('!bii'):
             await message.channel.send('Hallo my Kisah 📖')
+                    # ===== INTERACTION GIF COMMANDS (TAMBAHAN) =====
+
+        elif msg.startswith('!kiss'):
+            if message.mentions:
+                target = message.mentions[0]
+                gif_url = random.choice([
+                    "https://media.tenor.com/0AVbKGY_MxMAAAAC/kiss-anime.gif",
+                    "https://media.tenor.com/8k0xN6vWkO0AAAAC/anime-kiss.gif"
+                ])
+                embed = discord.Embed(
+                    description=f"{message.author.mention} mencium {target.mention} 😘",
+                    color=discord.Color.pink()
+                )
+                embed.set_image(url=gif_url)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Tag orangnya dulu ya 😅")
+
+        elif msg.startswith('!slap'):
+            if message.mentions:
+                target = message.mentions[0]
+                gif_url = random.choice([
+                    "https://media.tenor.com/6a42QlkVsCEAAAAC/anime-slap.gif",
+                    "https://media.tenor.com/o5Y3P5vJbZkAAAAC/slap-anime.gif"
+                ])
+                embed = discord.Embed(
+                    description=f"{message.author.mention} menampar {target.mention} 🖐️",
+                    color=discord.Color.red()
+                )
+                embed.set_image(url=gif_url)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Tag orangnya dulu ya 😤")
+
+        elif msg.startswith('!hug'):
+            if message.mentions:
+                target = message.mentions[0]
+                gif_url = random.choice([
+                    "https://media.tenor.com/ZVNnJ9Fq6cAAAAAC/anime-hug.gif",
+                    "https://media.tenor.com/5qHhC6d9s2gAAAAC/anime-hug-cute.gif"
+                ])
+                embed = discord.Embed(
+                    description=f"{message.author.mention} memeluk {target.mention} 🤗",
+                    color=discord.Color.green()
+                )
+                embed.set_image(url=gif_url)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Tag orangnya dulu ya 🤗")
+
+        elif msg.startswith('!bite'):
+            if message.mentions:
+                target = message.mentions[0]
+                gif_url = random.choice([
+                    "https://media.tenor.com/mB9iZ9fL5oQAAAAC/anime-bite.gif",
+                    "https://media.tenor.com/0XKqk0rGZW4AAAAC/anime-bite-cute.gif"
+                ])
+                embed = discord.Embed(
+                    description=f"{message.author.mention} menggigit {target.mention} 😈",
+                    color=discord.Color.orange()
+                )
+                embed.set_image(url=gif_url)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Tag orangnya dulu ya 😏")
+
+        elif msg.startswith('!pat'):
+            if message.mentions:
+                target = message.mentions[0]
+                gif_url = random.choice([
+                    "https://media.tenor.com/LUqLUEvFZ8kAAAAC/anime-head-pat.gif",
+                    "https://media.tenor.com/4h9gY6kE7WgAAAAC/anime-pat.gif"
+                ])
+                embed = discord.Embed(
+                    description=f"{message.author.mention} menepuk kepala {target.mention} 🥰",
+                    color=discord.Color.blurple()
+                )
+                embed.set_image(url=gif_url)
+                await message.channel.send(embed=embed)
+            else:
+                await message.channel.send("Tag orangnya dulu ya 🥺")
+
 
 intents = discord.Intents.default()
 intents.message_content = True
