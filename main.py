@@ -58,47 +58,52 @@ class Client(discord.Client):
 
         msg = message.content.lower()
 
-        if msg.startswith('halo'):
+        if msg.startswith('!halo'):
             await message.channel.send('Halo juga! 👋')
         
-        if msg.startswith('pagi'):
+        if msg.startswith('!pagi'):
             await message.channel.send('morning jga udh sarapan blm')
         
-        if msg.startswith('turu'):
+        if msg.startswith('!turu'):
             await message.channel.send('tidur ya jaga kesehatan mu')
 
-        elif msg.startswith('ping'):
+        elif msg.startswith('!ping'):
             await message.channel.send('Pong! 🏓')
 
-        elif msg.startswith('among'):
+        elif msg.startswith('!among'):
             await message.channel.send('@everyone 🚨 Ayo Among Us!')
         
-        elif msg.startswith('Among'):
+        elif msg.startswith('!Among'):
             await message.channel.send('@everyone 🚨 Ayo Among Us!')
 
-        elif msg.startswith('roblox'):
+        elif msg.startswith('!roblox'):
             await message.channel.send('@everyone 🎮 Langsung aja Roblox!')
 
-        elif msg.startswith('Roblox'):
+        elif msg.startswith('!Roblox'):
             await message.channel.send('@everyone 🎮 Langsung aja Roblox!')
         
-        elif msg.startswith('yuka'):
+        elif msg.startswith('!yuka'):
             await message.channel.send('hallo kak cantik gmn kabarnya')
         
-        elif msg.startswith('ryan'):
+        elif msg.startswith('!ryan'):
             await message.channel.send('suka ngompol di celana')
         
-        elif msg.startswith('kiwi'):
+        elif msg.startswith('!kiwi'):
             await message.channel.send('gua hancurin isi kepala lu gw gampar lu')
         
-        
-        elif msg.startswith('ml'):
+        elif msg.startswith('!ml'):
             await message.channel.send('@everyone 🎮 Langsung aja ml yg mau ikut!')
 
-        elif msg.startswith('gg'):
+        elif msg.startswith('!gg'):
             await message.channel.send('gg emg suka cowo gaes')
 
-        elif msg.startswith('maul'):
+        elif msg.startswith('!brann'):
+            await message.channel.send('Hallo owner baik dan ganteng')
+        
+        elif msg.startswith('!lele'):
+            await message.channel.send('Gais Kalian Baik Baik aja gwencana ya')
+
+        elif msg.startswith('!maul'):
             await message.channel.send('maul berak celana di sekolah')
 
 intents = discord.Intents.default()
