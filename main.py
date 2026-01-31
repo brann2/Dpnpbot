@@ -187,6 +187,9 @@ class Client(discord.Client):
         
         elif msg.startswith('!bii'):
             await message.channel.send('Hallo my Kisah 📖')
+        
+        elif msg.startswith('!melar'):
+            await message.channel.send('di sok sok an lu')
                     
 
         
