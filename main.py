@@ -207,7 +207,7 @@ class Client(discord.Client):
             await message.channel.send('infokan among us gais')
         
         elif msg.startswith('!malam'):
-            await message.channel.send('@everyone good night guys, mimpi indah semoga sehat selalu mimpiin aku yaaa')
+            await message.channel.send('@everyone good night guys, mimpi indah semoga sehat selalu,  mimpiin aku yaaa')
                     
 
         
