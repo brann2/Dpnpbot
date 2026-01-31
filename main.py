@@ -190,6 +190,9 @@ class Client(discord.Client):
         
         elif msg.startswith('!melar'):
             await message.channel.send('di sok sok an lu')
+        
+        elif msg.startswith('!caci'):
+            await message.channel.send('iri bilang boss')
                     
 
         
