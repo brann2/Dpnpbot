@@ -197,7 +197,7 @@ class Client(discord.Client):
         elif msg.startswith('!mile'):
             await message.channel.send('Ketua gengster, bikin gemeter🫦🫦')
         
-        elif msg.startswith('!whayu'):
+        elif msg.startswith('!wahyu'):
             await message.channel.send('ketua gengster ber bibir pink')
         
         elif msg.startswith('!natan'):
