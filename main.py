@@ -165,7 +165,7 @@ class Client(discord.Client):
             await message.channel.send('Hallo owner baik dan ganteng')
         
         elif msg.startswith('!king'):
-            await message.channel.send('Gais Kalian Baik Baik aja gwencana ya')
+            await message.channel.send('diatas owner masih ada king')
 
         elif msg.startswith('!maul'):
             await message.channel.send('maul berak celana di sekolah')
@@ -193,6 +193,18 @@ class Client(discord.Client):
         
         elif msg.startswith('!caci'):
             await message.channel.send('iri bilang boss')
+          
+        elif msg.startswith('!mile'):
+            await message.channel.send('Ketua gengster, bikin gemeter🫦🫦')
+        
+        elif msg.startswith('!whayu'):
+            await message.channel.send('ketua gengster ber bibir pink')
+        
+        elif msg.startswith('!natan'):
+            await message.channel.send('jarvis apakan dlu le biar ga apa kali')
+        
+        elif msg.startswith('!amour'):
+            await message.channel.send('infokan among us gais')
                     
 
         
