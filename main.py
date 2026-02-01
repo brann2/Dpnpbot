@@ -198,7 +198,7 @@ class Client(discord.Client):
             await message.channel.send('Ketua gengster, bikin gemeter🫦🫦')
         
         elif msg.startswith('!wahyu'):
-            await message.channel.send('ketua gengster ber bibir pink')
+            await message.channel.send('sehat sehat all, yang virtual terserah @everyone')
         
         elif msg.startswith('!natan'):
             await message.channel.send('jarvis apakan dlu le biar ga apa kali')
@@ -208,6 +208,9 @@ class Client(discord.Client):
         
         elif msg.startswith('!malam'):
             await message.channel.send('@everyone good night guys, mimpi indah semoga sehat selalu,  mimpiin aku yaaa')
+        
+        elif msg.startswith('!rin'):
+            await message.channel.send('omakkkkk')
                     
 
         
