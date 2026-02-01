@@ -74,6 +74,25 @@ class Client(discord.Client):
             embed.set_image(url="https://i.imgur.com/k3II9KX.jpeg")
 
             await channel.send(embed=embed)
+              
+        try:
+            dm_embed = discord.Embed(
+                title="Terima kasih sudah pernah jadi bagian dari kami 🤍",
+                description=(
+                    f"Hai {member.name},\n\n"
+                    f"Terima kasih sudah pernah bergabung di **{member.guild.name}**.\n"
+                    f"Semoga betah di tempat baru dan semoga hal-hal baik selalu datang ke kamu.\n\n"
+                    f"Pintu kami selalu terbuka kalau suatu saat mau kembali ✨"
+                ),
+                color=discord.Color.dark_blue()
+            )
+            dm_embed.set_footer(text="Salam dari komunitas DPNP")
+
+            await member.send(embed=dm_embed)
+
+        except discord.Forbidden:
+            # User menutup DM dari server
+            print(f"Tidak bisa kirim DM ke {member.name}")
 
     # ================= Booster =================
     async def on_member_update(self, before, after):
