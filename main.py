@@ -211,6 +211,9 @@ class Client(discord.Client):
         
         elif msg.startswith('!rin'):
             await message.channel.send('omakkkkk')
+        
+        elif msg.startswith('!jikan'):
+            await message.channel.send('pacaran kok virtual yahaha 👉🏻🤪 @everyone')
                     
 
         
