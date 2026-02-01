@@ -233,6 +233,10 @@ class Client(discord.Client):
         
         elif msg.startswith('!jikan'):
             await message.channel.send('p info voice yg girls')
+        
+        elif msg.startswith('!vann'):
+            await message.channel.send('pria ganteng idaman 😘😘😘')
+        
                     
 
         
