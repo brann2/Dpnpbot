@@ -514,6 +514,39 @@ class Client(discord.Client):
             )
             await message.channel.send(embed=embed)
 
+        elif msg.startswith('!rank'):
+            member = message.mentions[0] if message.mentions else message.author
+            user_id = str(member.id)
+            
+            if user_id not in xp_data:
+                await message.channel.send(f"{member.mention} belum punya data XP 📊")
+                return
+            
+            data = xp_data[user_id]
+            level = data["level"]
+            current_xp = data["xp"]
+            xp_needed = level * 100
+            
+            # Hitung progress bar
+            progress_percent = int((current_xp / xp_needed) * 100)
+            filled = "█" * (progress_percent // 10)
+            empty = "░" * (10 - (progress_percent // 10))
+            progress_bar = f"{filled}{empty} {progress_percent}%"
+            
+            badge = BADGES.get(level, "Pemula")
+            
+            embed = discord.Embed(
+                title=f"📊 Rank {member.name}",
+                color=member.color if member.color != discord.Color.default() else discord.Color.blue()
+            )
+            embed.set_thumbnail(url=member.display_avatar.url)
+            embed.add_field(name="🏅 Badge", value=badge, inline=False)
+            embed.add_field(name="⭐ Level", value=level, inline=False)
+            embed.add_field(name="✨ XP", value=f"{current_xp} / {xp_needed}", inline=False)
+            embed.add_field(name="📈 Progress", value=progress_bar, inline=False)
+            
+            await message.channel.send(embed=embed)
+
 
         # ===== Spam Detection =====
         now_ts = datetime.datetime.now().timestamp()
