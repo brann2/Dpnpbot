@@ -710,4 +710,11 @@ intents.members = True
 intents.voice_states = True
 
 client = Client(intents=intents)
+# ===== SLASH COMMAND KIRIM PANEL ROLE =====
+@client.tree.command(name="rolepanel", description="Kirim panel ambil role")
+async def rolepanel(interaction: discord.Interaction):
+    await interaction.response.send_message(
+        "🎮 **Ambil Role Disini**\nKlik tombol di bawah untuk ambil atau hapus role kamu:",
+        view=RolePanel()
+    )
 client.run(TOKEN)
