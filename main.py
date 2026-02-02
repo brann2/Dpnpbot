@@ -277,100 +277,94 @@ class Client(discord.Client):
                         except:
                             pass
 
-        if msg.startswith('!halo'):
+        if msg == '!halo':
             await message.channel.send('Halo juga! 👋')
         
-        if msg.startswith('!pagi'):
+        elif msg == '!pagi':
             await message.channel.send('morning jga udh sarapan blm')
         
-        if msg.startswith('!turu'):
+        elif msg == '!turu':
             await message.channel.send('tidur ya jaga kesehatan mu')
 
-        elif msg.startswith('!ping'):
+        elif msg == '!ping':
             await message.channel.send('Pong! 🏓')
 
-        elif msg.startswith('!among'):
-            await message.channel.send('@everyone  Ayo Among Us!')
-        
-        elif msg.startswith('!Among'):
+        elif msg == '!among':
             await message.channel.send('@everyone  Ayo Among Us!')
 
-        elif msg.startswith('!roblox'):
+        elif msg == '!roblox':
             await message.channel.send('@everyone  Langsung aja Roblox!')
 
-        elif msg.startswith('!Roblox'):
-            await message.channel.send('@everyone  Langsung aja Roblox!')
-        
-        elif msg.startswith('!yuka'):
+        elif msg == '!yuka':
             await message.channel.send('hallo kak cantik gmn kabarnya')
         
-        elif msg.startswith('!ryan'):
+        elif msg == '!ryan':
             await message.channel.send('Hallo Ganteng')
         
-        elif msg.startswith('!kiwi'):
+        elif msg == '!kiwi':
             await message.channel.send('Apeeeeeeeeee')
         
-        elif msg.startswith('!ml'):
+        elif msg == '!ml':
             await message.channel.send('@everyone  Langsung aja ml yg mau ikut!')
 
-        elif msg.startswith('!gg'):
+        elif msg == '!gg':
             await message.channel.send('infokan mancing fish it')
 
-        elif msg.startswith('!brann'):
+        elif msg == '!brann':
             await message.channel.send('Hallo owner baik dan ganteng')
         
-        elif msg.startswith('!king'):
+        elif msg == '!king':
             await message.channel.send('diatas owner masih ada king')
 
-        elif msg.startswith('!maul'):
+        elif msg == '!maul':
             await message.channel.send('maul berak celana di sekolah')
         
-        elif msg.startswith('!yeay'):
+        elif msg == '!yeay':
             await message.channel.send('adik terbaik sedipienpi ')
 
-        elif msg.startswith('!wann'):
+        elif msg == '!wann':
             await message.channel.send('wann Login ada yang mau minta gendong tuh')
 
-        elif msg.startswith('!itik'):
+        elif msg == '!itik':
             await message.channel.send('info roblox/ml  brannn')
 
-        elif msg.startswith('!putra'):
+        elif msg == '!putra':
             await message.channel.send('ytta')
 
-        elif msg.startswith('!diyana'):
+        elif msg == '!diyana':
             await message.channel.send('Apakabar anak anak absen dlu satu satu')
         
-        elif msg.startswith('!bii'):
+        elif msg == '!bii':
             await message.channel.send('Hallo my Kisah 📖')
         
-        elif msg.startswith('!melar'):
+        elif msg == '!melar':
             await message.channel.send('di sok sok an lu')
         
-        elif msg.startswith('!caci'):
+        elif msg == '!caci':
             await message.channel.send('iri bilang boss')
           
-        elif msg.startswith('!mile'):
+        elif msg == '!mile':
             await message.channel.send('Ketua gengster, bikin gemeter🫦🫦')
         
-        elif msg.startswith('!wahyu'):
+        elif msg == '!wahyu':
             await message.channel.send('sehat sehat all, banyak olahraga')
         
-        elif msg.startswith('!natan'):
+        elif msg == '!natan':
             await message.channel.send('jarvis apakan dlu le biar ga apa kali')
         
-        elif msg.startswith('!amour'):
+        elif msg == '!amour':
             await message.channel.send('infokan among us gais')
         
-        elif msg.startswith('!malam'):
+        elif msg == '!malam':
             await message.channel.send('@everyone good night guys, mimpi indah semoga sehat selalu,  mimpiin aku yaaa')
         
-        elif msg.startswith('!rin'):
+        elif msg == '!rin':
             await message.channel.send('omakkkkk')
         
-        elif msg.startswith('!jikan'):
+        elif msg == '!jikan':
             await message.channel.send('p info voice yg girls')
         
-        elif msg.startswith('!vann'):
+        elif msg == '!vann':
             await message.channel.send('pria ganteng idaman 😘😘😘')
         
         elif msg.startswith('!profile'):
@@ -398,7 +392,6 @@ class Client(discord.Client):
 
             await message.channel.send(embed=embed)
 
-        
         elif msg.startswith('!kiss'):
             if message.mentions:
                 target = message.mentions[0]
@@ -487,7 +480,7 @@ class Client(discord.Client):
             else:
                 await message.channel.send("Tag orangnya dulu ya 😉")
 
-        elif msg.startswith('!daily'):
+        elif msg == '!daily':
             today = datetime.date.today()
             last_claim = daily_claims.get(message.author.id)
 
@@ -498,7 +491,7 @@ class Client(discord.Client):
                 self.add_xp(message.author, DAILY_XP)
                 await message.channel.send(f"🎁 Kamu dapat {DAILY_XP} XP hari ini!")
 
-        elif msg.startswith('!top'):
+        elif msg == '!top':
             # Kelompokkan user berdasarkan level
             levels_dict = {}
             for user_id, data in xp_data.items():
@@ -534,7 +527,7 @@ class Client(discord.Client):
             embed.set_footer(text=f"Total user: {len(xp_data)}")
             await message.channel.send(embed=embed)
 
-        elif msg.startswith('!rank'):
+        elif msg == '!rank':
             member = message.mentions[0] if message.mentions else message.author
             user_id = str(member.id)
             
@@ -548,22 +541,31 @@ class Client(discord.Client):
             xp_needed = level * 100
             
             # Hitung progress bar
-            progress_percent = int((current_xp / xp_needed) * 100)
+            progress_percent = int((current_xp / xp_needed) * 100) if xp_needed > 0 else 0
             filled = "█" * (progress_percent // 10)
             empty = "░" * (10 - (progress_percent // 10))
             progress_bar = f"{filled}{empty} {progress_percent}%"
             
             badge = BADGES.get(level, "Pemula")
             
+            # Hitung rank di leaderboard
+            sorted_users = sorted(xp_data.items(), key=lambda x: (x[1]["level"], x[1]["xp"]), reverse=True)
+            rank = 1
+            for idx, (uid, udata) in enumerate(sorted_users, start=1):
+                if uid == user_id:
+                    rank = idx
+                    break
+            
             embed = discord.Embed(
                 title=f"📊 Rank {member.name}",
                 color=member.color if member.color != discord.Color.default() else discord.Color.blue()
             )
             embed.set_thumbnail(url=member.display_avatar.url)
+            embed.add_field(name="🏆 Ranking Global", value=f"#{rank} dari {len(xp_data)}", inline=False)
             embed.add_field(name="🏅 Badge", value=badge, inline=False)
             embed.add_field(name="⭐ Level", value=level, inline=False)
-            embed.add_field(name="✨ XP", value=f"{current_xp} / {xp_needed}", inline=False)
-            embed.add_field(name="📈 Progress", value=progress_bar, inline=False)
+            embed.add_field(name="✨ XP Progress", value=f"{current_xp} / {xp_needed} XP", inline=False)
+            embed.add_field(name="📈 Progress Bar", value=progress_bar, inline=False)
             
             await message.channel.send(embed=embed)
 
