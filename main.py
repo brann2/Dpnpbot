@@ -66,24 +66,31 @@ def save_xp():
 
 # ================= FIXED BUTTON ROLE =================
 
-class RoleButton(Button):
-    def __init__(self, label, role_id, custom_id, style=discord.ButtonStyle.primary):
-        super().__init__(label=label, style=style, custom_id=custom_id)
+class RoleButton(discord.ui.Button):
+    def __init__(self, label: str, role_id: int, custom_id: str):
+        super().__init__(
+            label=label,
+            style=discord.ButtonStyle.primary,
+            custom_id=custom_id
+        )
         self.role_id = role_id
 
     async def callback(self, interaction: discord.Interaction):
         role = interaction.guild.get_role(self.role_id)
+
         if role is None:
             await interaction.response.send_message("Role tidak ditemukan.", ephemeral=True)
             return
 
         member = interaction.user
+
         if role in member.roles:
             await member.remove_roles(role)
             await interaction.response.send_message(f"❌ Role **{role.name}** dihapus dari kamu.", ephemeral=True)
         else:
             await member.add_roles(role)
             await interaction.response.send_message(f"✅ Role **{role.name}** berhasil diberikan!", ephemeral=True)
+
 
 class RolePanel(View):
     def __init__(self):
