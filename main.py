@@ -105,11 +105,19 @@ class Client(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        self.add_view(RolePanel())  # Persistent buttons
         await self.tree.sync()
 
     async def on_ready(self):
         print(f'Logged on as {self.user}!')
+
+        # Register persistent view DI SINI
+        try:
+            self.add_view(RolePanel())
+            print("Persistent RolePanel loaded")
+        except Exception as e:
+            print("Gagal load RolePanel:", e)
+
+        
         
     # ===== XP FUNCTION =====
     def add_xp(self, member, amount):
