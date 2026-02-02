@@ -520,7 +520,7 @@ class Client(discord.Client):
             embed.set_footer(text=f"Total user: {len(xp_data)}")
             await message.channel.send(embed=embed)
 
-        elif msg == '!rank':
+        elif msg.startswith('!rank'):
             member = message.mentions[0] if message.mentions else message.author
             user_id = str(member.id)
             
