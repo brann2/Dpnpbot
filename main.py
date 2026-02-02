@@ -237,7 +237,25 @@ class Client(discord.Client):
         elif msg.startswith('!vann'):
             await message.channel.send('pria ganteng idaman 😘😘😘')
         
-                    
+        elif msg.startswith('!profile'):
+            member = message.mentions[0] if message.mentions else message.author
+
+            roles = [role.mention for role in member.roles if role.name != "@everyone"]
+            roles_text = ", ".join(roles) if roles else "Tidak punya role"
+
+            embed = discord.Embed(
+                title=f"👤 Profil {member.name}",
+                color=member.color if member.color != discord.Color.default() else discord.Color.blue()
+            )
+
+            embed.set_thumbnail(url=member.display_avatar.url)
+            embed.add_field(name="🆔 User ID", value=member.id, inline=False)
+            embed.add_field(name="📛 Username", value=f"{member.name}#{member.discriminator}", inline=False)
+            embed.add_field(name="📅 Akun Dibuat", value=member.created_at.strftime("%d %B %Y"), inline=False)
+            embed.add_field(name="📆 Gabung Server", value=member.joined_at.strftime("%d %B %Y"), inline=False)
+            embed.add_field(name="🎭 Roles", value=roles_text, inline=False)
+
+            await message.channel.send(embed=embed)
 
         
         elif msg.startswith('!kiss'):
