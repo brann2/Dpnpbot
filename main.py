@@ -3,6 +3,7 @@ import random
 import json
 import os
 import datetime
+from collections import deque
 from config import TOKEN
 
 WELCOME_CHANNEL_ID = 1417152242817044550
@@ -46,6 +47,10 @@ voice_join_time = {}
 daily_claims = {}
 last_message_time = {}
 XP_COOLDOWN = 60  # detik
+
+spam_records = {}            # user_id -> deque of timestamps
+SPAM_WINDOW = 10             # detik jendela waktu untuk hitung spam
+SPAM_THRESHOLD = 5           # jumlah pesan dalam SPAM_WINDOW dianggap spam
 
 if os.path.exists(XP_FILE):
     with open(XP_FILE, "r") as f:
@@ -508,6 +513,23 @@ class Client(discord.Client):
                 color=discord.Color.green()
             )
             await message.channel.send(embed=embed)
+
+
+        # ===== Spam Detection =====
+        now_ts = datetime.datetime.now().timestamp()
+        dq = spam_records.setdefault(message.author.id, deque())
+        dq.append(now_ts)
+        # hapus timestamp yang lebih tua dari window
+        while dq and now_ts - dq[0] > SPAM_WINDOW:
+            dq.popleft()
+
+        if len(dq) >= SPAM_THRESHOLD:
+            try:
+                await message.channel.send(f"Hey {message.author.mention}, tolong jangan spam dong 🙏, Berisik Ganggu gw lagi Drakoran")
+            except:
+                pass
+            dq.clear()
+            return
 
 
 intents = discord.Intents.default()
