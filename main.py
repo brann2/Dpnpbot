@@ -502,16 +502,21 @@ class Client(discord.Client):
             sorted_users = sorted(xp_data.items(), key=lambda x: (x[1]["level"], x[1]["xp"]), reverse=True)
 
             leaderboard = ""
-            for i, (user_id, data) in enumerate(sorted_users[:10], start=1):
+            rank = 1
+            for user_id, data in sorted_users[:10]:
                 user = message.guild.get_member(int(user_id))
                 if user:
-                    leaderboard += f"**{i}. {user.name}** — Level {data['level']}\n"
+                    level = data['level']
+                    xp = data['xp']
+                    leaderboard += f"**#{rank}. {user.name}** — Lv {level} ({xp} XP)\n"
+                    rank += 1
 
             embed = discord.Embed(
                 title="🏆 Leaderboard Server",
                 description=leaderboard or "Belum ada data",
-                color=discord.Color.green()
+                color=discord.Color.gold()
             )
+            embed.set_footer(text=f"Total user: {len(xp_data)}")
             await message.channel.send(embed=embed)
 
         elif msg.startswith('!rank'):
