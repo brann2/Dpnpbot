@@ -1,5 +1,8 @@
 import discord
 import random
+import json
+import os
+import datetime
 from config import TOKEN
 
 WELCOME_CHANNEL_ID = 1417152242817044550
@@ -8,10 +11,109 @@ BOOST_CHANNEL_ID = 1417152381291860118
 BOOSTER_ROLE_ID = 1437740399786459247    
 AUTO_ROLE_ID = 1438899323336130802
 RULES_CHANNEL_ID = 1459140957932093652
+LEVEL_UP_CHANNEL_ID = 1467701484102619257  # GANTI ke channel rank-up
+
+LEVEL_ROLES = {
+    5: 1467711658934927461,   # GANTI ID role
+    10: 1467711802870599946,
+    20: 1467711915177541847,
+    30: 1467712000367792330,
+    40: 1467712170119921908,
+    60: 1467712247987179581,
+    75: 1467712305323184172,
+    85: 1467712397807587452,
+    100: 1467712463435989068
+
+}
+
+BADGES = {
+    5: "🥉 Bocil Baru",
+    10: "🥈 Tukang Ngobrol",
+    20: "🥇 Anak Voice",
+    30: "🎮 Anak Mabar",
+    40: "🔥 warga asli",
+    60: "💎 Sesepuh",
+    75: "👑 Penguasa Tongkrongan",
+    85: "🐐 Sepuh Abadi",
+    100: "🐐 GOAT"
+
+}
+
+XP_FILE = "xp_data.json"
+DAILY_XP = 50
+
+voice_join_time = {}
+daily_claims = {}
+last_message_time = {}
+XP_COOLDOWN = 60  # detik
+
+if os.path.exists(XP_FILE):
+    with open(XP_FILE, "r") as f:
+        xp_data = json.load(f)
+else:
+    xp_data = {}
+
+def save_xp():
+    with open(XP_FILE, "w") as f:
+        json.dump(xp_data, f)
 
 class Client(discord.Client):
     async def on_ready(self):
         print(f'Logged on as {self.user}!')
+        
+    # ===== XP FUNCTION =====
+    def add_xp(self, member, amount):
+        user_id = str(member.id)
+
+        if user_id not in xp_data:
+            xp_data[user_id] = {"xp": 0, "level": 1}
+
+        xp_data[user_id]["xp"] += amount
+        level = xp_data[user_id]["level"]
+        xp_needed = level * 100
+
+        if xp_data[user_id]["xp"] >= xp_needed:
+            xp_data[user_id]["xp"] -= xp_needed
+            xp_data[user_id]["level"] += 1
+            save_xp()
+            return True
+
+        save_xp()
+        return False
+
+    # ================= VOICE XP =================
+    async def on_voice_state_update(self, member, before, after):
+        if before.channel is None and after.channel is not None:
+            voice_join_time[member.id] = datetime.datetime.now()
+
+        elif before.channel is not None and after.channel is None:
+            if member.id in voice_join_time:
+                join_time = voice_join_time.pop(member.id)
+                duration = (datetime.datetime.now() - join_time).total_seconds()
+                xp_earned = int(duration // 120)  # 2 menit = 1 XP
+
+                if xp_earned > 0:
+                    leveled_up = self.add_xp(member, xp_earned)
+
+                    if leveled_up:
+                        new_level = xp_data[str(member.id)]["level"]
+                        channel = member.guild.get_channel(LEVEL_UP_CHANNEL_ID)
+
+                        if channel:
+                            embed = discord.Embed(
+                                title="🎉 LEVEL UP!",
+                                description=f"{member.mention} naik ke **Level {new_level}** 🔥 (Voice Activity)",
+                                color=discord.Color.gold()
+                            )
+                            await channel.send(embed=embed)
+
+                        if new_level in LEVEL_ROLES:
+                            role = member.guild.get_role(LEVEL_ROLES[new_level])
+                            if role:
+                                try:
+                                    await member.add_roles(role)
+                                except:
+                                    pass
 
     # ================= WELCOME =================
     async def on_member_join(self, member):
@@ -131,8 +233,7 @@ class Client(discord.Client):
             if channel:
                 await channel.send(
                     f"@everyone 🎉 Server naik ke **LEVEL {after.guild.premium_tier}** berkat para booster! Terima kasih 💜"
-                )
-    
+              )
 
     # ================= COMMAND =================
     async def on_message(self, message):
@@ -140,6 +241,36 @@ class Client(discord.Client):
             return
 
         msg = message.content.lower()
+        
+        # ===== XP SYSTEM CHAT =====
+        now = datetime.datetime.now().timestamp()
+        last_time = last_message_time.get(message.author.id, 0)
+
+        if now - last_time >= XP_COOLDOWN:
+            last_message_time[message.author.id] = now
+
+            xp_gain = random.randint(5, 15)
+            leveled_up = self.add_xp(message.author, xp_gain)
+
+            if leveled_up:
+                new_level = xp_data[str(message.author.id)]["level"]
+                channel = message.guild.get_channel(LEVEL_UP_CHANNEL_ID)
+
+                if channel:
+                    embed = discord.Embed(
+                        title="🎉 LEVEL UP!",
+                        description=f"{message.author.mention} naik ke **Level {new_level}** 🔥",
+                        color=discord.Color.gold()
+                    )
+                    await channel.send(embed=embed)
+
+                if new_level in LEVEL_ROLES:
+                    role = message.guild.get_role(LEVEL_ROLES[new_level])
+                    if role:
+                        try:
+                            await message.author.add_roles(role)
+                        except:
+                            pass
 
         if msg.startswith('!halo'):
             await message.channel.send('Halo juga! 👋')
@@ -249,8 +380,13 @@ class Client(discord.Client):
             )
 
             embed.set_thumbnail(url=member.display_avatar.url)
+            level = xp_data.get(str(member.id), {}).get("level", 1)
+            badge = BADGES.get(level, "Pemula")
+
+            embed.add_field(name="🏅 Badge", value=badge, inline=False)
+            embed.add_field(name="⭐ Level", value=level, inline=False)
             embed.add_field(name="🆔 User ID", value=member.id, inline=False)
-            embed.add_field(name="📛 Username", value=f"{member.name}#{member.discriminator}", inline=False)
+            embed.add_field(name="📛 Username", value=member.name, inline=False)
             embed.add_field(name="📅 Akun Dibuat", value=member.created_at.strftime("%d %B %Y"), inline=False)
             embed.add_field(name="📆 Gabung Server", value=member.joined_at.strftime("%d %B %Y"), inline=False)
             embed.add_field(name="🎭 Roles", value=roles_text, inline=False)
@@ -263,7 +399,7 @@ class Client(discord.Client):
                 target = message.mentions[0]
                 gif_url = random.choice([
                     "https://media1.tenor.com/m/1fNT0SY5cjwAAAAd/nene-nene-amano.gif",
-                    "https://media1.tenor.com/m/Fvwt33eN3hUAAAAC/anime-cute.gif"
+                    "https://media1.tenor.com/m/Fvwt33eN3hUAAAAC/anime-cute.gif",
                     "https://media1.tenor.com/m/iDQT9BjSSXsAAAAC/kimsoohyun-kimjiwon.gif"
                 ])
                 embed = discord.Embed(
@@ -346,10 +482,38 @@ class Client(discord.Client):
             else:
                 await message.channel.send("Tag orangnya dulu ya 😉")
 
+        elif msg.startswith('!daily'):
+            today = datetime.date.today()
+            last_claim = daily_claims.get(message.author.id)
+
+            if last_claim == today:
+                await message.channel.send("Kamu sudah ambil daily XP hari ini 🎁")
+            else:
+                daily_claims[message.author.id] = today
+                self.add_xp(message.author, DAILY_XP)
+                await message.channel.send(f"🎁 Kamu dapat {DAILY_XP} XP hari ini!")
+
+        elif msg.startswith('!top'):
+            sorted_users = sorted(xp_data.items(), key=lambda x: (x[1]["level"], x[1]["xp"]), reverse=True)
+
+            leaderboard = ""
+            for i, (user_id, data) in enumerate(sorted_users[:10], start=1):
+                user = message.guild.get_member(int(user_id))
+                if user:
+                    leaderboard += f"**{i}. {user.name}** — Level {data['level']}\n"
+
+            embed = discord.Embed(
+                title="🏆 Leaderboard Server",
+                description=leaderboard or "Belum ada data",
+                color=discord.Color.green()
+            )
+            await message.channel.send(embed=embed)
+
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
+intents.voice_states = True
 
 client = Client(intents=intents)
 client.run(TOKEN)
