@@ -73,9 +73,11 @@ def save_xp():
     with open(XP_FILE, "w") as f:
         json.dump(xp_data, f)
 
+# ================= FIXED BUTTON ROLE =================
+
 class RoleButton(Button):
-    def __init__(self, label, role_id, style=discord.ButtonStyle.primary):
-        super().__init__(label=label, style=style)
+    def __init__(self, label, role_id, custom_id, style=discord.ButtonStyle.primary):
+        super().__init__(label=label, style=style, custom_id=custom_id)
         self.role_id = role_id
 
     async def callback(self, interaction: discord.Interaction):
@@ -86,24 +88,18 @@ class RoleButton(Button):
 
         member = interaction.user
         if role in member.roles:
-            try:
-                await member.remove_roles(role)
-                await interaction.response.send_message(f"❌ Role **{role.name}** dihapus dari kamu.", ephemeral=True)
-            except discord.Forbidden:
-                await interaction.response.send_message("Bot tidak punya izin menghapus role.", ephemeral=True)
+            await member.remove_roles(role)
+            await interaction.response.send_message(f"❌ Role **{role.name}** dihapus dari kamu.", ephemeral=True)
         else:
-            try:
-                await member.add_roles(role)
-                await interaction.response.send_message(f"✅ Role **{role.name}** berhasil diberikan!", ephemeral=True)
-            except discord.Forbidden:
-                await interaction.response.send_message("Bot tidak punya izin menambahkan role.", ephemeral=True)
+            await member.add_roles(role)
+            await interaction.response.send_message(f"✅ Role **{role.name}** berhasil diberikan!", ephemeral=True)
 
 class RolePanel(View):
     def __init__(self):
         super().__init__(timeout=None)
-        self.add_item(RoleButton("Mobile Legends", 1449602863687794789))
-        self.add_item(RoleButton("Among Us", 1449603295046930443))
-        self.add_item(RoleButton("Roblox", 1449603377150562354))
+        self.add_item(RoleButton("Mobile Legends", 1449602863687794789, "role_ml"))
+        self.add_item(RoleButton("Among Us", 1449603295046930443, "role_among"))
+        self.add_item(RoleButton("Roblox", 1449603377150562354, "role_roblox"))
 
 class Client(discord.Client):
     def __init__(self, *, intents):
@@ -111,9 +107,7 @@ class Client(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        # Pastikan view dipasang agar tombol tetap aktif setelah restart
-        self.add_view(RolePanel())
-        # Sync command (bisa lambat pertama kali)
+        self.add_view(RolePanel())  # Persistent buttons
         await self.tree.sync()
 
     async def on_ready(self):
