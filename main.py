@@ -254,11 +254,15 @@ class Client(discord.Client):
         # ===== XP SYSTEM CHAT =====
         now = datetime.datetime.now().timestamp()
         last_time = last_message_time.get(message.author.id, 0)
+        
+        # Deteksi kata rahasia
+        secret_word_detected = "bran baik dan ganteng" in message.content.lower()
+        xp_multiplier = 2 if secret_word_detected else 1
 
         if now - last_time >= XP_COOLDOWN:
             last_message_time[message.author.id] = now
 
-            xp_gain = random.randint(5, 15)
+            xp_gain = random.randint(5, 15) * xp_multiplier
             leveled_up = self.add_xp(message.author, xp_gain)
 
             if leveled_up:
@@ -496,35 +500,20 @@ class Client(discord.Client):
                 await message.channel.send(f"🎁 Kamu dapat {DAILY_XP} XP hari ini!")
 
         elif msg == '!top':
-            # Kelompokkan user berdasarkan level
-            levels_dict = {}
-            for user_id, data in xp_data.items():
-                level = data['level']
-                if level not in levels_dict:
-                    levels_dict[level] = []
-                levels_dict[level].append((user_id, data))
-            
-            # Sort setiap level berdasarkan XP (dari tinggi ke rendah)
-            for level in levels_dict:
-                levels_dict[level].sort(key=lambda x: x[1]['xp'], reverse=True)
-            
-            # Sort levels dari tertinggi ke terendah
-            sorted_levels = sorted(levels_dict.keys(), reverse=True)
+            # Sort semua user berdasarkan level (tertinggi) lalu XP (tertinggi)
+            sorted_users = sorted(xp_data.items(), key=lambda x: (x[1]["level"], x[1]["xp"]), reverse=True)
             
             leaderboard = ""
-            rank = 1
-            
-            for level in sorted_levels:
-                leaderboard += f"\n**=== LEVEL {level} ===**\n"
-                for user_id, data in levels_dict[level]:
-                    user = message.guild.get_member(int(user_id))
-                    if user:
-                        xp = data['xp']
-                        leaderboard += f"**#{rank}. {user.name}** — {xp} XP\n"
-                        rank += 1
+            for rank, (user_id, data) in enumerate(sorted_users, start=1):
+                user = message.guild.get_member(int(user_id))
+                if user:
+                    level = data['level']
+                    xp = data['xp']
+                    badge = BADGES.get(level, "Pemula")
+                    leaderboard += f"**#{rank}. {user.name}** — Level {level} | {xp} XP | {badge}\n"
             
             embed = discord.Embed(
-                title="🏆 Leaderboard Server (All Levels)",
+                title="🏆 Leaderboard Server",
                 description=leaderboard or "Belum ada data",
                 color=discord.Color.gold()
             )
