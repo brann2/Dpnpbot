@@ -244,6 +244,10 @@ class Client(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
+        
+        # Skip semua bot
+        if message.author.bot:
+            return
 
         msg = message.content.lower()
         
