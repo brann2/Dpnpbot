@@ -40,6 +40,15 @@ BADGES = {
 
 }
 
+# ===== REACTION ROLE CONFIG =====
+REACTION_ROLES = {
+    1449608061139550420: {
+        "<:images4:1449606900852326511>": 1449602863687794789,      # Mobile Legends
+        "<:among:1234567891>": 1449603295046930443,   # Among Us
+        "<:roblox:1234567892>": 1449603377150562354   # Roblox
+    }
+}
+
 XP_FILE = "xp_data.json"
 DAILY_XP = 50
 
@@ -239,6 +248,77 @@ class Client(discord.Client):
                 await channel.send(
                     f"@everyone 🎉 Server naik ke **LEVEL {after.guild.premium_tier}** berkat para booster! Terima kasih 💜"
               )
+
+    # ================= REACTION ROLE =================
+    async def on_raw_reaction_add(self, payload):
+        if payload.user_id == self.user.id:
+            return
+        if payload.message_id not in REACTION_ROLES:
+            return
+
+        emoji_str = str(payload.emoji)
+        if emoji_str not in REACTION_ROLES[payload.message_id]:
+            return
+
+        role_id = REACTION_ROLES[payload.message_id][emoji_str]
+        guild = self.get_guild(payload.guild_id)
+        if guild is None:
+            return
+
+        member = guild.get_member(payload.user_id)
+        if member is None:
+            try:
+                member = await guild.fetch_member(payload.user_id)
+            except:
+                return
+
+        role = guild.get_role(role_id)
+        if member and role:
+            try:
+                await member.add_roles(role)
+                # kirim konfirmasi di channel (fallback ke client.get_channel)
+                channel = guild.get_channel(payload.channel_id) if payload.channel_id else None
+                if channel is None:
+                    channel = self.get_channel(payload.channel_id) if payload.channel_id else None
+                if channel:
+                    await channel.send(f"{member.mention} ✅ Kamu mendapat role **{role.name}**")
+            except Exception as e:
+                print("Failed to add role:", e)
+
+
+    async def on_raw_reaction_remove(self, payload):
+        if payload.user_id == self.user.id:
+            return
+        if payload.message_id not in REACTION_ROLES:
+            return
+
+        emoji_str = str(payload.emoji)
+        if emoji_str not in REACTION_ROLES[payload.message_id]:
+            return
+
+        role_id = REACTION_ROLES[payload.message_id][emoji_str]
+        guild = self.get_guild(payload.guild_id)
+        if guild is None:
+            return
+
+        member = guild.get_member(payload.user_id)
+        if member is None:
+            try:
+                member = await guild.fetch_member(payload.user_id)
+            except:
+                return
+
+        role = guild.get_role(role_id)
+        if member and role:
+            try:
+                await member.remove_roles(role)
+                channel = guild.get_channel(payload.channel_id) if payload.channel_id else None
+                if channel is None:
+                    channel = self.get_channel(payload.channel_id) if payload.channel_id else None
+                if channel:
+                    await channel.send(f"{member.mention} ❌ Role **{role.name}** telah dihapus.")
+            except Exception as e:
+                print("Failed to remove role:", e)
 
     # ================= COMMAND =================
     async def on_message(self, message):
