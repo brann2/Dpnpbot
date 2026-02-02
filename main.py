@@ -499,20 +499,35 @@ class Client(discord.Client):
                 await message.channel.send(f"🎁 Kamu dapat {DAILY_XP} XP hari ini!")
 
         elif msg.startswith('!top'):
-            sorted_users = sorted(xp_data.items(), key=lambda x: (x[1]["level"], x[1]["xp"]), reverse=True)
-
+            # Kelompokkan user berdasarkan level
+            levels_dict = {}
+            for user_id, data in xp_data.items():
+                level = data['level']
+                if level not in levels_dict:
+                    levels_dict[level] = []
+                levels_dict[level].append((user_id, data))
+            
+            # Sort setiap level berdasarkan XP (dari tinggi ke rendah)
+            for level in levels_dict:
+                levels_dict[level].sort(key=lambda x: x[1]['xp'], reverse=True)
+            
+            # Sort levels dari tertinggi ke terendah
+            sorted_levels = sorted(levels_dict.keys(), reverse=True)
+            
             leaderboard = ""
             rank = 1
-            for user_id, data in sorted_users[:10]:
-                user = message.guild.get_member(int(user_id))
-                if user:
-                    level = data['level']
-                    xp = data['xp']
-                    leaderboard += f"**#{rank}. {user.name}** — Lv {level} ({xp} XP)\n"
-                    rank += 1
-
+            
+            for level in sorted_levels:
+                leaderboard += f"\n**=== LEVEL {level} ===**\n"
+                for user_id, data in levels_dict[level]:
+                    user = message.guild.get_member(int(user_id))
+                    if user:
+                        xp = data['xp']
+                        leaderboard += f"**#{rank}. {user.name}** — {xp} XP\n"
+                        rank += 1
+            
             embed = discord.Embed(
-                title="🏆 Leaderboard Server",
+                title="🏆 Leaderboard Server (All Levels)",
                 description=leaderboard or "Belum ada data",
                 color=discord.Color.gold()
             )
