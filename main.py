@@ -99,6 +99,109 @@ class RolePanel(View):
         self.add_item(RoleButton("Among Us", 1449603295046930443, "role_among"))
         self.add_item(RoleButton("Roblox", 1449603377150562354, "role_roblox"))
 
+
+class LeaderboardView(View):
+    def __init__(self, author_id: int, guild: discord.Guild, sorted_users, per_page: int = 10):
+        super().__init__(timeout=180)
+        self.author_id = author_id
+        self.guild = guild
+        self.per_page = per_page
+        self.entries = []
+        self.page = 0
+        self.message = None
+
+        rank_no = 1
+        for user_id, data in sorted_users:
+            member = guild.get_member(int(user_id))
+            if not member:
+                continue
+            level = data["level"]
+            xp = data["xp"]
+            badge = BADGES.get(level, "Pemula")
+            self.entries.append((rank_no, member, level, xp, badge))
+            rank_no += 1
+
+        self.total_pages = max(1, (len(self.entries) + self.per_page - 1) // self.per_page)
+        author_index = next((i for i, item in enumerate(self.entries) if item[1].id == self.author_id), None)
+        if author_index is not None:
+            self.page = author_index // self.per_page
+
+        self._update_buttons()
+
+    def _make_embed(self) -> discord.Embed:
+        start = self.page * self.per_page
+        end = start + self.per_page
+        page_entries = self.entries[start:end]
+
+        lines = []
+        for rank_no, member, level, xp, badge in page_entries:
+            marker = ">> " if member.id == self.author_id else ""
+            lines.append(f"{marker}**#{rank_no}. {member.name}** - Level {level} | {xp} XP | {badge}")
+
+        description = "\n".join(lines) if lines else "Belum ada data"
+        embed = discord.Embed(
+            title="Leaderboard Server",
+            description=description,
+            color=discord.Color.gold()
+        )
+        embed.set_footer(text=f"Halaman {self.page + 1}/{self.total_pages} | Total user: {len(self.entries)}")
+        return embed
+
+    def _update_buttons(self):
+        at_start = self.page <= 0
+        at_end = self.page >= self.total_pages - 1
+        self.first_page.disabled = at_start
+        self.prev_page.disabled = at_start
+        self.next_page.disabled = at_end
+        self.last_page.disabled = at_end
+        self.page_info.label = f"{self.page + 1}/{self.total_pages}"
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if interaction.user.id != self.author_id:
+            await interaction.response.send_message(
+                "Tombol ini cuma buat yang jalankan command !top.",
+                ephemeral=True
+            )
+            return False
+        return True
+
+    async def on_timeout(self):
+        for item in self.children:
+            item.disabled = True
+        if self.message:
+            try:
+                await self.message.edit(view=self)
+            except:
+                pass
+
+    @discord.ui.button(label="<<", style=discord.ButtonStyle.secondary, row=0)
+    async def first_page(self, interaction: discord.Interaction, button: Button):
+        self.page = 0
+        self._update_buttons()
+        await interaction.response.edit_message(embed=self._make_embed(), view=self)
+
+    @discord.ui.button(label="<", style=discord.ButtonStyle.secondary, row=0)
+    async def prev_page(self, interaction: discord.Interaction, button: Button):
+        self.page = max(0, self.page - 1)
+        self._update_buttons()
+        await interaction.response.edit_message(embed=self._make_embed(), view=self)
+
+    @discord.ui.button(label="1/1", style=discord.ButtonStyle.secondary, disabled=True, row=0)
+    async def page_info(self, interaction: discord.Interaction, button: Button):
+        await interaction.response.defer()
+
+    @discord.ui.button(label=">", style=discord.ButtonStyle.secondary, row=0)
+    async def next_page(self, interaction: discord.Interaction, button: Button):
+        self.page = min(self.total_pages - 1, self.page + 1)
+        self._update_buttons()
+        await interaction.response.edit_message(embed=self._make_embed(), view=self)
+
+    @discord.ui.button(label=">>", style=discord.ButtonStyle.secondary, row=0)
+    async def last_page(self, interaction: discord.Interaction, button: Button):
+        self.page = self.total_pages - 1
+        self._update_buttons()
+        await interaction.response.edit_message(embed=self._make_embed(), view=self)
+
 class Client(discord.Client):
     def __init__(self, *, intents):
         super().__init__(intents=intents)
@@ -556,23 +659,10 @@ class Client(discord.Client):
         elif msg == '!top':
             # Sort semua user berdasarkan level (tertinggi) lalu XP (tertinggi)
             sorted_users = sorted(xp_data.items(), key=lambda x: (x[1]["level"], x[1]["xp"]), reverse=True)
-            
-            leaderboard = ""
-            for rank, (user_id, data) in enumerate(sorted_users, start=1):
-                user = message.guild.get_member(int(user_id))
-                if user:
-                    level = data['level']
-                    xp = data['xp']
-                    badge = BADGES.get(level, "Pemula")
-                    leaderboard += f"**#{rank}. {user.name}** — Level {level} | {xp} XP | {badge}\n"
-            
-            embed = discord.Embed(
-                title="🏆 Leaderboard Server",
-                description=leaderboard or "Belum ada data",
-                color=discord.Color.gold()
-            )
-            embed.set_footer(text=f"Total user: {len(xp_data)}")
-            await message.channel.send(embed=embed)
+
+            view = LeaderboardView(message.author.id, message.guild, sorted_users, per_page=10)
+            sent_message = await message.channel.send(embed=view._make_embed(), view=view)
+            view.message = sent_message
 
         elif msg.startswith('!rank'):
             member = message.mentions[0] if message.mentions else message.author
@@ -648,3 +738,4 @@ async def rolepanel(interaction: discord.Interaction):
         view=RolePanel()
     )
 client.run(TOKEN)
+
